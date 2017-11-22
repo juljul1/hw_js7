@@ -55,13 +55,20 @@ h1, h3{
 }
 #cover-div {
   position: fixed;
-  top: 200px;
-  left: 35%;
-  z-index: 9000;
-  width: 350px;
-  height: 20%;
-  background-color: blue;
+  top: 0px;
+  /*left: 35%;
+  z-index: 9000;*/
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  background-color: gray;
   opacity: 0.9;
+}
+.btn{
+  height: 20px;
+  margin-top: 20%;
 }
 #bgdiv {
   position: fixed;

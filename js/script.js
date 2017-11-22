@@ -1,45 +1,53 @@
 //1
 //1.0 add input max 10
-i = 0;
-addinput.onclick = function(){
-  if (i < 10) {
-    var newInput = document.createElement('input');
-    var removeButton = document.getElementById('removeinput');
-    newInput.className = 'usertext';
-    newInput.name = i;
-    removeButton.className = 'visible';
-    inputscollect.appendChild(newInput);
-    i++;
-  }
+const addBtnFoo = () => {
+  var newInput = document.createElement('input'),
+      removeButton = document.querySelector('#removeinput'),
+      countInput = document.querySelectorAll(".usertext").length;
+    if (countInput < 6) {
+  //btn
+        addinput.disabled = false; 
+        removeButton.classList.add('visible');
+  //add input
+        newInput.classList.add('usertext');
+        inputscollect.appendChild(newInput);    
+    }else{
+  //dissable bott +
+        addinput.disabled = true;
+        collectedinp.innerHTML = 'No more inputs';
+    }
+}
+
+//delete notifications errors if exsists
+const delNotif = () =>{
+  let fillDiv = document.querySelectorAll('.fill-form');
+    if (inputscollect.contains(inputscollect.querySelector('.fill-form'))) {
+        fillDiv.forEach(function (elem){
+        inputscollect.querySelector('.fill-form').remove() //del TextNode
+        })
+      }
 }
 
 //#1.1 + #2 + #3 collect diff inputs into p
-docollect.onclick = function () {
-      // radios
-      checkOdd = document.getElementById('odd').checked,
+const collectFoo = () => {
+  var checkOdd = document.getElementById('odd').checked,
       checkEven = document.getElementById('even').checked,
-      checkAll = document.getElementById('all').checked
-    collectedinp.innerHTML = '' //delete from <p>
-      //delete notifications if exsist
-      if (inputscollect.contains(inputscollect.querySelector('.fill-form'))) {
-        let fillDiv = document.querySelectorAll('.fill-form');
-            fillDiv.forEach(function (elem){
-              inputscollect.querySelector('.fill-form').remove() //del TextNode
-      })}
-
-    let input = document.querySelectorAll('.usertext');
+      checkAll = document.getElementById('all').checked;
+      collectedinp.innerHTML = ''; //delete from <p>
+  delNotif(); //dell all errors notifications
+  
+  let input = document.querySelectorAll('.usertext');
       input.forEach(function (elem, index) {
-        elem.classList.remove('bgred'); //del red if exsist
         let newText = document.createElement('p'); 
-        newText.className = 'fill-form';
-        newText.innerHTML = '!Fill the form';
+            elem.classList.remove('bgred'); //del red if exsist
+            newText.className = 'fill-form';
+            newText.innerHTML = '!Fill the form';
         
         if (elem.value == '') { //проверка на пустое значение
             inputscollect.insertBefore(newText, elem);  //create notifications of empty
             elem.classList.add('bgred');
         }
         else{
-      
             if (checkAll == true ) { //takes all inputs
               collectedinp.innerHTML += elem.value;
           } else if (checkOdd == true) { //takes odd inputs
@@ -54,25 +62,24 @@ docollect.onclick = function () {
           elem.value = '';
         }})
   }
-    
+
+addinput.addEventListener('click', addBtnFoo);
+docollect.addEventListener('click', collectFoo);  
+
 //1.2 remove last input
 removeinput.onclick = function(){
-  if (i>=1) {
+  if (document.querySelectorAll(".usertext").length >= 1) {
     let lastInputs = document.querySelector('.usertext:last-child');
     let allInputs = document.querySelectorAll('.usertext');
         inputscollect.removeChild(lastInputs); //dell last inp
-       
-       //del red if exsist
+        addinput.disabled = false;  //enable bott;
+        collectedinp.innerHTML = ' ';
+//del red if exsist
         allInputs.forEach(function(elem){
           elem.classList.remove('bgred'); 
         })
-        //dell all notifications  
-        if (inputscollect.contains(inputscollect.querySelector('.fill-form'))) {
-          let fillDiv = document.querySelectorAll('.fill-form');
-              fillDiv.forEach(function (elem){
-              inputscollect.querySelector('.fill-form').remove() //del TextNode
-        })}
-  i--;
+//dell all notifications  
+       delNotif();
   } else{
     removeinput.disabled = 'true'; //dissable bott -
   }
@@ -81,35 +88,28 @@ removeinput.onclick = function(){
 //4
 //show window
 showbutton.onclick = function showCover() {
-    let coverDiv = document.getElementById('cover-div'),
-        bgdiv = document.getElementById('bgdiv');
+    let coverDiv = document.getElementById('cover-div');
         coverDiv.classList.remove('hidden');
-        bgdiv.classList.remove('hidden');
       // if opt 1
       opt1.onclick = function madeOption() {
         coverDiv.classList.add('hidden');
-        bgdiv.classList.add('hidden');
         optionRes.innerHTML = 'Теперь ты вышел из матрицы!';
       }
       // if opt 2
       opt2.onclick = function madeOption() {
         coverDiv.classList.add('hidden');
-        bgdiv.classList.add('hidden');
         optionRes.innerHTML = 'Ну и ладно';
       }
     }
+
 //5
 //reed elems
-  
 function addRed(){
 let allp = elemsdiv.querySelectorAll(':scope > p');
+  
   allp.forEach(function (elem){
     elem.onclick = function(){
-      if (elem.classList == 'red') {
-         elem.classList.remove('red')
-      }else {
-        elem.classList.add('red');
-      }
+      elem.classList.toggle('red');
     }
   });
 }
@@ -118,12 +118,12 @@ addRed();
 //add elem p
 push.onclick = function(){
   let addValue = document.getElementById('value').value;
-  let arrElem = document.createElement('p'); 
     if (addValue == ''){
            alert("Введите значение");
     } else {
-          elemsdiv.appendChild(arrElem);
+          let arrElem = document.createElement('p'); 
           arrElem.innerHTML = addValue;
+          elemsdiv.appendChild(arrElem);
           addRed();
           value.value = '';
     }
